@@ -59,7 +59,6 @@ public class PIIFinderScanner implements ScanCheck{
 
             for (JsonNode ruleNode : rootNode) {
                 String name = ruleNode.get("name").asText();
-                // api.logging().logToOutput("Checking rule for: " + name);
 
                 if (ruleNode.has("keywords")) {
                     JsonNode keywordsNode = ruleNode.get("keywords");
@@ -67,7 +66,6 @@ public class PIIFinderScanner implements ScanCheck{
 
                     while (keywordsIterator.hasNext()) {
                         String keyword = keywordsIterator.next().asText();
-                        // api.logging().logToOutput("Checking keyword: " + keyword);
 
                         List<Marker> responseHighlights = matchKeyword(baseRequestResponse, keyword);
 
@@ -86,7 +84,35 @@ public class PIIFinderScanner implements ScanCheck{
                                 baseRequestResponse.withResponseMarkers(responseHighlights)
                             );
 
-                            api.logging().logToOutput("Adicionando para: " + keyword);
+                            auditIssueList.add(newAuditIssue);
+                        }
+                    }
+                }
+
+                if (ruleNode.has("regex")) {
+                    String regexPattern = ruleNode.get("regex").asText();
+                    Pattern pattern = Pattern.compile(regexPattern);
+                    Matcher matcher = pattern.matcher(baseRequestResponse.response().toString());
+
+                    while (matcher.find()) {
+
+                        List<Marker> responseHighlights = matchKeyword(baseRequestResponse, matcher.group());
+
+                        if (!responseHighlights.isEmpty()){
+
+                            AuditIssue newAuditIssue = auditIssue(
+                                "PII Detected",
+                                "The response contains a string that matched with the regex: " + name,
+                                null,
+                                baseRequestResponse.request().url(),
+                                AuditIssueSeverity.HIGH,
+                                AuditIssueConfidence.CERTAIN,
+                                null,
+                                null,
+                                AuditIssueSeverity.HIGH,
+                                baseRequestResponse.withResponseMarkers(responseHighlights)
+                            );
+
                             auditIssueList.add(newAuditIssue);
                         }
                     }

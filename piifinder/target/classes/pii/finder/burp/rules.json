@@ -9,18 +9,13 @@
             "full_name", 
             "fullname", 
             "given_name", 
-            "family_name", 
+            "legal_name", 
             "nickname", 
-            "user_name", 
             "username", 
             "display_name",
             "preferred_name",
             "formatted_name"
         ]
-    },
-    {
-        "name": "CPF",
-        "regex" : "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})"
     },
     {
         "name": "Address",
@@ -34,10 +29,7 @@
             "postcode",
             "postal_code",
             "\"city\"",
-            "state",
-            "province",
-            "region",
-            "country",
+            "\"state\"",
             "neighborhood",
             "street_address",
             "billing_address",
@@ -51,12 +43,12 @@
     },
     {
         "name": "Email",
-        "regex": "[a-z0-,9.]+@[a-z0-9]+\\.[a-z]+\\.([a-z]+)?"
+        "regex": "[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?"
     },
     {
         "name": "Credit Card",
         "keywords": [
-            "credit_card",
+            "\"credit_card\"",
             "credit_card_number",
             "card_number",
             "card_type",
@@ -70,8 +62,7 @@
             "credit_card_provider",
             "credit_card_expiry",
             "credit_card_validity"
-        ],
-        "regex": "\\b(?:\\d[ -]*?){13,16}\\b"
+        ]
     }
     
 ]
